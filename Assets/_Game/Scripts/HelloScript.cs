@@ -26,9 +26,8 @@ public class HelloScript : MonoBehaviour
 
     private IEnumerator Hello()
     {
-        yield return SetText("This game was made in 48 hours for Ludum Dare...", 3f);
-        yield return null;
-        yield return SetText("... by Mizaless", 2f);
+        yield return SetText("This game was made in 48 hours for Ludum Dare...", 4f);
+        yield return SetText("... by Mizaless", 3f);
 
         SceneManager.LoadScene("MainScene");
     }
@@ -36,16 +35,19 @@ public class HelloScript : MonoBehaviour
 
     private IEnumerator SetText(string text, float fadeDuration)
     {
+        float scaleOffDuration = 0.5f;
+        
         _text.color = Color.white;
         _text.text = text;
         _text.transform.localScale = Vector3.zero;
         _text.transform.DOScale(_startScale, 0.2f);
         _text.DOFade(0f, fadeDuration);
 
-        yield return SetTimer(fadeDuration);
-        _text.DOKill();
-        _text.transform.DOScale(Vector3.zero, 0.5f);
-        yield return new WaitForSeconds(0.5f);
+        yield return SetTimer(fadeDuration - scaleOffDuration);
+        // _text.DOKill();
+        yield return null;
+        _text.transform.DOScale(Vector3.zero, scaleOffDuration);
+        yield return new WaitForSeconds(scaleOffDuration);
     }
 
     private IEnumerator SetTimer(float duration)
