@@ -8,24 +8,32 @@ public class HelloScript : MonoBehaviour
 {
     [SerializeField] private TMP_Text _text;
 
+    private Vector3 _startScale;
+    
     private void Start()
     {
+        _startScale = _text.transform.localScale;
         StartCoroutine(Hello());
     }
 
     private IEnumerator Hello()
     {
-        _text.text = "This game was made in 48 hours for Ludum Dare...";
-        _text.DOFade(0, 2f);
+        
+        SetText("This game was made in 48 hours for Ludum Dare...", 3f);
+        yield return new WaitForSeconds(3f);
 
-        yield return new WaitForSeconds(2f);
-
-        _text.color = Color.white;
-        _text.text = "... by Mizaless";
-        _text.DOFade(0f, 2f);
-
+        SetText("... by Mizaless", 2f);
         yield return new WaitForSeconds(2f);
 
         SceneManager.LoadScene("MainScene");
+    }
+    
+    private void SetText(string text, float fadeDuration)
+    {
+        _text.color = Color.white;
+        _text.text = text;
+        _text.transform.localScale = Vector3.zero;
+        _text.transform.DOScale(_startScale, 0.2f);
+        _text.DOFade(0f, fadeDuration);
     }
 }
