@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/_Game/Scenes/HelloScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
+    path: Assets/_Game/Scenes/ComicsScene.unity
+    guid: 7c2122b5114836c43b11024303570dc1
+  - enabled: 1
     path: Assets/_Game/Scenes/MainScene.unity
     guid: f1562b1af06078c4384bda645bd69902
+  - enabled: 1
+    path: Assets/_Game/Scenes/EndScene.unity
+    guid: 1a868adb5268a7149a7f4e20996e9686
   m_configObjects: {}

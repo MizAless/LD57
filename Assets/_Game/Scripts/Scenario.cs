@@ -2,6 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace _Game.Scripts
@@ -24,32 +25,71 @@ namespace _Game.Scripts
         [SerializeField] private ObstaclesSpawner _obstaclesSpawner;
         [SerializeField] private Obstacle _secondStageObstacle;
 
+        [SerializeField] private PlantWormSpawner _plantWormSpawner;
+
         [SerializeField] private SpriteRenderer _flashLight;
         [SerializeField] private Worm _wormPrefab;
+        [SerializeField] private Health _characterHealth;
+        [SerializeField] private int _startStage = 1;
+
+        [SerializeField] private Image _fadeInScreen;
+
 
         private int stage = 1;
 
         private void Start()
         {
-            _materials[0].SetColor("_Color", _startBGColor);
-            _materials[1].SetColor("_Color", Color.white);
+            // PlayerPrefs.DeleteAll();
 
-            foreach (var material in _materials)
-            {
-                material.SetFloat("_LerpFactor", 0);
-                material.SetTexture("_FromTex", _stagesTextures[stage - 1]);
-                material.SetTexture("_ToTex", _stagesTextures[stage - 1]);
-            }
+            stage = PlayerPrefs.GetInt("Stage", _startStage);
 
             StartCoroutine(Go());
             StartCoroutine(WallsMove());
             StartCoroutine(SettingMoverRange());
             StartCoroutine(SettingSpawnerRange());
+            _obstaclesSpawner.StartSpawning();
+
+            if (stage == 1 || stage == 2)
+            {
+                _materials[0].SetColor("_Color", _startBGColor);
+                _materials[1].SetColor("_Color", Color.white);
+
+                foreach (var material in _materials)
+                {
+                    material.SetFloat("_LerpFactor", 0);
+                    material.SetTexture("_FromTex", _stagesTextures[stage - 1]);
+                    material.SetTexture("_ToTex", _stagesTextures[stage - 1]);
+                }
+            }
+            else
+            {
+                foreach (var material in _materials)
+                {
+                    material.SetFloat("_LerpFactor", 0);
+                    material.SetTexture("_FromTex", _stagesTextures[1]);
+                    material.SetTexture("_ToTex", _stagesTextures[1]);
+                }
+            }
+
+            if (stage == 2)
+            {
+                Stage2();
+            }
+
+            if (stage == 3)
+            {
+                Stage3();
+            }
+
+            if (stage == 4)
+            {
+                Stage4();
+            }
         }
 
         private IEnumerator Go()
         {
-            var elapsedTime = 0f;
+            var elapsedTime = (stage - 1) * _gameTime * 0.25f;
 
             while (elapsedTime < _gameTime)
             {
@@ -60,27 +100,67 @@ namespace _Game.Scripts
                 if (stage == 1 && _progressSlider.value > 0.25f)
                 {
                     stage++;
-                    StartCoroutine(ChangeBiom(_stagesTextures[stage - 1]));
-                    StartCoroutine(SetDarkening());
-                    _obstaclesSpawner.SetPrefab(_secondStageObstacle);
+                    PlayerPrefs.SetInt("Stage", stage);
+
+                    Stage2();
                 }
 
                 if (stage == 2 && _progressSlider.value > 0.5f)
                 {
                     stage++;
+                    PlayerPrefs.SetInt("Stage", stage);
 
-                    TurnOnFlashlight();
+                    Stage3();
                 }
 
                 if (stage == 3 && _progressSlider.value > 0.75f)
                 {
                     stage++;
+                    PlayerPrefs.SetInt("Stage", stage);
 
-                    TurnOffFlashlight();
+                    Stage4();
                 }
             }
+            
+            _obstaclesSpawner.StopSpawning();
+            _plantWormSpawner.StopSpawning();
+            
+            yield return new WaitForSeconds(1f);
 
+            _characterHealth.CantHit();
             Instantiate(_wormPrefab);
+            _fadeInScreen.DOColor(Color.black, 1.5f);
+            yield return new WaitForSeconds(0.5f);
+            SoundManager.Instance.PlayWormEatSound();
+            yield return new WaitForSeconds(2f);
+            SceneManager.LoadScene("EndScene");
+        }
+
+        private void Stage2()
+        {
+            SoundManager.Instance.PlayMonsterSound();
+            StartCoroutine(ChangeBiom(_stagesTextures[stage - 1]));
+            StartCoroutine(SetDarkening(_gameTime * 0.25f));
+            _obstaclesSpawner.SetPrefab(_secondStageObstacle);
+        }
+
+        private void Stage3()
+        {
+            TurnOnFlashlight();
+            _obstaclesSpawner.StopSpawning();
+            _plantWormSpawner.StartSpawning();
+            _obstaclesSpawner.SetPrefab(_secondStageObstacle);
+        }
+
+        private void Stage4()
+        {
+            TurnOffFlashlight();
+            _obstaclesSpawner.SetCooldownRange(0);
+            _obstaclesSpawner.SetCooldown(2f);
+            _obstaclesSpawner.SetSizeMultiplier(0.5f);
+            _obstaclesSpawner.StartSpawning();
+            _plantWormSpawner.StartSpawning();
+            _obstaclesSpawner.SetPrefab(_secondStageObstacle);
         }
 
         private IEnumerator SettingMoverRange()
@@ -155,7 +235,7 @@ namespace _Game.Scripts
             }
         }
 
-        private IEnumerator SetDarkening()
+        private IEnumerator SetDarkening(float duration)
         {
             Color[] startColors = new Color[_materials.Length];
             Color[] targetColors = new Color[_materials.Length];
@@ -165,7 +245,7 @@ namespace _Game.Scripts
                 startColors[i] = _materials[i].GetColor("_Color");
                 // targetColors[i] = startColors[i] * 0.5f; // он должен стать темнее на 50%;
 
-                var multiplier = 0.25f;
+                var multiplier = 0.15f;
 
                 targetColors[i] = new Color(
                     startColors[i].r * multiplier,
@@ -177,7 +257,7 @@ namespace _Game.Scripts
 
             var elapsedTime = 0f;
 
-            while (elapsedTime < _gameTime * 0.25f)
+            while (elapsedTime < duration)
             {
                 elapsedTime += Time.deltaTime;
 

@@ -36,6 +36,11 @@ namespace _Game.Scripts
             Changed?.Invoke();
             print(Value);
         }
+        
+        public void CantHit()
+        {
+            CanHit = false;
+        }
 
         private IEnumerator Invulnerability()
         {

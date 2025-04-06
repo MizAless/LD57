@@ -1,11 +1,6 @@
-using System;
 using System.Collections;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
-using Range = UnityEngine.SocialPlatforms.Range;
 
 namespace _Game.Scripts
 {
@@ -18,12 +13,40 @@ namespace _Game.Scripts
         [field: SerializeField] public float StartRange = 3f;
         [field: SerializeField] public float EndRange = 1f;
 
-        public float Range;
+        [HideInInspector] public float Range;
 
+        private bool _isSpawning = false;
+        
+        private float _sizeMultiplier = 1f;
+        
         private void Start()
         {
             Range = StartRange;
+        }
+        
+        public void StartSpawning()
+        {
             StartCoroutine(Spawning());
+        }
+        
+        public void StopSpawning()
+        {
+            _isSpawning = false;
+        }
+        
+        public void SetSizeMultiplier(float value)
+        {
+            _sizeMultiplier = value;
+        }
+
+        public void SetCooldownRange(float range)
+        {
+            _cooldownRange = range;
+        }
+        
+        public void SetCooldown(float cooldown)
+        {
+            _cooldown = cooldown;
         }
         
         public void SetPrefab(Obstacle obstacle)
@@ -33,15 +56,21 @@ namespace _Game.Scripts
 
         private IEnumerator Spawning()
         {
-            while (enabled)
+            if (_isSpawning)
+                yield break;
+            
+            _isSpawning = true;
+            
+            while (_isSpawning)
             {
-                var obstacle = Instantiate(_obstaclePrefab, transform.position, Quaternion.identity);
-                var randomX = Random.Range(-Range, Range);
-                obstacle.transform.position = obstacle.transform.position.WithX(randomX);
-
                 var cooldown = _cooldown + Random.Range(-_cooldownRange, _cooldownRange);
                 
                 yield return new WaitForSeconds(cooldown);
+
+                var obstacle = Instantiate(_obstaclePrefab, transform.position, Quaternion.identity);
+                var randomX = Random.Range(-Range, Range);
+                obstacle.transform.position = obstacle.transform.position.WithX(randomX);
+                obstacle.transform.localScale *= _sizeMultiplier;
             }
         }
 

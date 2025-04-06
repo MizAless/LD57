@@ -12,6 +12,8 @@ namespace _Game.Scripts
         [SerializeField] private Transform Slide3;
         [SerializeField] private Transform Slide4;
         
+        [SerializeField] private AudioSource _fallingSound;
+        
         private Vector3 _slide1TargetPosition;
         private Vector3 _slide2TargetPosition;
         private Vector3 _slide3TargetPosition;
@@ -50,13 +52,14 @@ namespace _Game.Scripts
             
             Slide2.DOMove(_slide2TargetPosition, 0.3f).SetEase(Ease.InQuad);
             
-            yield return SetTimer(3f);
+            yield return SetTimer(5f);
             
             Slide3.DOMove(_slide3TargetPosition, 0.3f).SetEase(Ease.InQuad);
             
             yield return SetTimer(3f);
             
             Slide4.DOMove(_slide4TargetPosition, 0.3f).SetEase(Ease.InQuad);
+            _fallingSound.Play();
             
             yield return SetTimer(2.5f);
             yield return SetTimer(0.5f);

@@ -30,6 +30,8 @@ namespace _Game.Scripts
                 var effect = Instantiate(_effectPrefab, transform.position, _effectPrefab.transform.rotation);
                 effect.Play();
                 HitEffect.Instance.Execute();
+                SoundManager.Instance.PlayRocksSound();
+                SoundManager.Instance.PlayHitSound();
                 Destroy(gameObject);
             }
         }

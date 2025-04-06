@@ -7,7 +7,6 @@ namespace _Game.Scripts
     {
         private static readonly int IsAttacking = Animator.StringToHash("IsAttacking");
         [SerializeField] private float _speed;
-        [SerializeField] private Collider2D _collider;
         [SerializeField] private Animator _animator;
         
         private Character _character;
@@ -15,7 +14,6 @@ namespace _Game.Scripts
         private void Start()
         {
             _character = Character.Instance;
-            // _collider.OnTriggerEnter2D 
 
             StartCoroutine(LifeCycle());
         }
@@ -29,11 +27,11 @@ namespace _Game.Scripts
         {
             var evaluateTime = 0f;
 
-            while (evaluateTime < 1.5f)
+            while (evaluateTime < 2f)
             {
                 evaluateTime += Time.deltaTime;
                 
-                Vector3 direction = _character.transform.position - transform.position;
+                Vector3 direction = _character.transform.position + Vector3.down * 3f  - transform.position;
                 transform.up = direction;
                 
                 // transform.LookAt(_character.transform.position); замени на метод подходящий для 2d, то есть чтобы объект смотрел на персонажа своей осью Y 
@@ -45,8 +43,8 @@ namespace _Game.Scripts
         
         private void Attack()
         {
-            print("attack");
             _animator.SetTrigger(IsAttacking);
+            SoundManager.Instance.PlayWormPlantSound();
         }
     }
 }

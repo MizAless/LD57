@@ -17,6 +17,7 @@ namespace _Game.Scripts
         
         private IEnumerator FadeOut(float duration)
         {
+            _background.color = Color.black;
             _background.DOFade(0, duration);
             yield return new WaitForSeconds(duration);
             _background.gameObject.SetActive(false);

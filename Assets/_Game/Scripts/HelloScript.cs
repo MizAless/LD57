@@ -29,7 +29,7 @@ public class HelloScript : MonoBehaviour
         yield return SetText("This game was made in 48 hours for Ludum Dare...", 4f);
         yield return SetText("... by Mizaless", 3f);
 
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("ComicsScene");
     }
 
 
