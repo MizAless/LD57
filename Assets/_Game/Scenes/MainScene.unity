@@ -352,6 +352,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &495957748
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 495957750}
+  - component: {fileID: 495957749}
+  m_Layer: 0
+  m_Name: HitEffect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &495957749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495957748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7acd56ff94408793c4b670e3c0ef80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transforms:
+  - {fileID: 1865994849}
+  - {fileID: 1490872415}
+  - {fileID: 2085632926}
+  _duration: 0.2
+  _strength: 2
+--- !u!4 &495957750
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495957748}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.20324174, y: -8.655334, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &578513428
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,7 +522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _progressSlider: {fileID: 578513430}
-  _gameTime: 15
+  _gameTime: 120
   _leftWall: {fileID: 1490872415}
   _rightWall: {fileID: 1865994849}
   _mover: {fileID: 2123071176}
@@ -483,6 +533,8 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 44e9db7e769e37744b340078a5cdea9e, type: 3}
   - {fileID: 2800000, guid: aff958bf8b47dcc4ab6e5f3adf23b4d2, type: 3}
   _startBGColor: {r: 0.53333336, g: 0.53333336, b: 0.53333336, a: 1}
+  _obstaclesSpawner: {fileID: 1285491500}
+  _secondStageObstacle: {fileID: 447284927012593469, guid: 626ffad994d13464aaccef65f40d3f0b, type: 3}
   _flashLight: {fileID: 1221061062}
   _wormPrefab: {fileID: 7557369421260533251, guid: 8eed870dc04657f4486e9a4acc4c780b, type: 3}
 --- !u!4 &654444280
@@ -871,7 +923,7 @@ GameObject:
   - component: {fileID: 1285491501}
   - component: {fileID: 1285491500}
   m_Layer: 0
-  m_Name: ObsSpawner
+  m_Name: ObstacleSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -890,9 +942,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _obstaclePrefab: {fileID: 447284927012593469, guid: 907e59dc1d2d5b145ba59abc1b6e06af, type: 3}
-  _cooldown: 1.5
-  _cooldownRange: 1.5
-  _range: 3
+  _cooldown: 0.5
+  _cooldownRange: 1
+  StartRange: 6
+  EndRange: 1.4
+  Range: 0
 --- !u!4 &1285491501
 Transform:
   m_ObjectHideFlags: 0
@@ -965,7 +1019,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 859ad60b828e0e341a7476bccdc36eb0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -1082,7 +1136,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 44e9db7e769e37744b340078a5cdea9e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1285,7 +1339,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 44e9db7e769e37744b340078a5cdea9e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1782,7 +1836,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: 44e9db7e769e37744b340078a5cdea9e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1937,6 +1991,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startHealth: 3
+  _invulnerabilityDuration: 2
+  _spriteRenderer: {fileID: 1366735665}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1952,3 +2008,4 @@ SceneRoots:
   - {fileID: 1888562448}
   - {fileID: 1285491501}
   - {fileID: 654444280}
+  - {fileID: 495957750}

@@ -15,11 +15,14 @@ namespace _Game.Scripts
         [SerializeField] private Transform _rightWall;
 
         [SerializeField] private Mover _mover;
-        
+
         [SerializeField] private Material[] _materials;
 
         [SerializeField] private Texture[] _stagesTextures;
         [SerializeField] private Color _startBGColor;
+
+        [SerializeField] private ObstaclesSpawner _obstaclesSpawner;
+        [SerializeField] private Obstacle _secondStageObstacle;
 
         [SerializeField] private SpriteRenderer _flashLight;
         [SerializeField] private Worm _wormPrefab;
@@ -41,6 +44,7 @@ namespace _Game.Scripts
             StartCoroutine(Go());
             StartCoroutine(WallsMove());
             StartCoroutine(SettingMoverRange());
+            StartCoroutine(SettingSpawnerRange());
         }
 
         private IEnumerator Go()
@@ -58,6 +62,7 @@ namespace _Game.Scripts
                     stage++;
                     StartCoroutine(ChangeBiom(_stagesTextures[stage - 1]));
                     StartCoroutine(SetDarkening());
+                    _obstaclesSpawner.SetPrefab(_secondStageObstacle);
                 }
 
                 if (stage == 2 && _progressSlider.value > 0.5f)
@@ -82,7 +87,17 @@ namespace _Game.Scripts
         {
             while (_progressSlider.value < 1f)
             {
-                _mover.Range = Mathf.Lerp(_mover.StartRange, _mover.EndRange , _progressSlider.value);
+                _mover.Range = Mathf.Lerp(_mover.StartRange, _mover.EndRange, _progressSlider.value);
+                yield return null;
+            }
+        }
+
+        private IEnumerator SettingSpawnerRange()
+        {
+            while (_progressSlider.value < 1f)
+            {
+                _obstaclesSpawner.Range = Mathf.Lerp(_obstaclesSpawner.StartRange, _obstaclesSpawner.EndRange,
+                    _progressSlider.value);
                 yield return null;
             }
         }

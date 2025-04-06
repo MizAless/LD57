@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1460113464427790473}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.55606955, w: 0.8311358}
-  m_LocalPosition: {x: 0.23, y: 0.04, z: 0}
-  m_LocalScale: {x: 2.702151, y: 2.702151, z: 2.702151}
+  m_LocalRotation: {x: -0, y: -0, z: 0.99995595, w: 0.009386144}
+  m_LocalPosition: {x: -0.07, y: 0.31, z: 0}
+  m_LocalScale: {x: 1.1019372, y: 1.1019372, z: 1.1019372}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3899384563106542349}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 67.569}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 178.924}
 --- !u!212 &2073627091749598275
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ad335eba81e96ae4db66e11989e8fc17, type: 3}
-  m_Color: {r: 0.9433962, g: 0.8089169, b: 0.70309716, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 18892b5b443c8a54e83a362395b713e8, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 2488871186686596809}
   - component: {fileID: 836312829585600088}
   m_Layer: 0
-  m_Name: Obstacle 1
+  m_Name: Obstacle2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,7 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f994465805d441779e68390232cda7de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 6
+  _speed: 7.5
+  _effectPrefab: {fileID: 3776823226501339226, guid: efe3f27e4308b3e4999f4a0120ddf107, type: 3}
 --- !u!70 &2488871186686596809
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

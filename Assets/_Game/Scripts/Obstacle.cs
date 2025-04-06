@@ -5,7 +5,8 @@ namespace _Game.Scripts
     public class Obstacle : MonoBehaviour
     {
         [SerializeField] private float _speed = 5f;
-        
+        [SerializeField] private ParticleSystem _effectPrefab;
+
         private Transform _transform;
 
         private void Awake()
@@ -22,7 +23,13 @@ namespace _Game.Scripts
         {
             if (other.gameObject.TryGetComponent(out Health health))
             {
+                if (!health.CanHit)
+                    return;
+                
                 health.TakeDamage(1);
+                var effect = Instantiate(_effectPrefab, transform.position, _effectPrefab.transform.rotation);
+                effect.Play();
+                HitEffect.Instance.Execute();
                 Destroy(gameObject);
             }
         }
